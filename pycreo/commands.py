@@ -115,13 +115,14 @@ class CreoCommandsMixin(BaseCommandMixin):
         return resp, err
 
     def pwd(self, session_id):
-        """Returns path to the work directory."""
+        """Returns path to the current directory."""
         resp, err = self._send_request({
             'command': 'creo',
             'function': 'pwd',
             'sessionId': session_id,
         })
-        return resp, err
+        curr_dir = resp['data']['dirname']
+        return curr_dir, err
 
     def rmdir(self, session_id, dirname):
         """Removes empty directory."""
@@ -131,6 +132,45 @@ class CreoCommandsMixin(BaseCommandMixin):
             'sessionId': session_id,
             'data': {
                 'dirname': dirname
+            }
+        })
+        return resp, err
+
+
+class DimensionCommandsMixin(BaseCommandMixin):
+    def dimensions_list(self, session_id, filename, dimension_names=()):
+        resp, err = self._send_request({
+            'command': 'dimension',
+            'function': 'list',
+            'sessionId': session_id,
+            'data': {
+                'file': filename,
+                'names': dimension_names
+            }
+        })
+        return resp, err
+
+
+class FileCommandsMixin(BaseCommandMixin):
+    def open_file(self,
+                  session_id,
+                  dirname,
+                  filenames=(),
+                  display=False,
+                  activate=False,
+                  new_window=False,
+                  regen_force=False):
+        resp, err = self._send_request({
+            'command': 'file',
+            'function': 'open',
+            'sessionId': session_id,
+            'data': {
+                'dirname': dirname,
+                'files': filenames,
+                'display': display,
+                'activate': activate,
+                'new_window': new_window,
+                'regen_force': regen_force,
             }
         })
         return resp, err

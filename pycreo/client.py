@@ -1,4 +1,5 @@
-from pycreo.commands import ConnectionCommandsMixin, CreoCommandsMixin
+from pycreo.commands import ConnectionCommandsMixin, CreoCommandsMixin, \
+    DimensionCommandsMixin, FileCommandsMixin
 from pycreo.core import CreosonApi
 from pycreo import configs
 from pycreo.http_client import HttpClient
@@ -6,6 +7,8 @@ from pycreo.http_client import HttpClient
 
 class CreosonClient(ConnectionCommandsMixin,
                     CreoCommandsMixin,
+                    DimensionCommandsMixin,
+                    FileCommandsMixin,
                     CreosonApi):
     _configs = configs.configs
 

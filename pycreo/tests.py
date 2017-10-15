@@ -13,9 +13,9 @@ if __name__ == '__main__':
     is_running, err = client.is_creo_running()
     print(f'is creo running: {is_running}')
 
-    print('creo list_dirs ... ')
-    resp, err = client.dir_list(session_id)
-    print(f'list_dir resp: {resp}')
+    # print('creo list_dirs ... ')
+    # resp, err = client.dir_list(session_id)
+    # print(f'list_dir resp: {resp}')
 
     print('go to the working dir ...')
     resp, err = client.go_to_work_dir(session_id)
@@ -28,23 +28,31 @@ if __name__ == '__main__':
     resp, err = client.files_list(session_id)
     print(f'files list: {resp}')
 
-    print('create temp dir ...')
-    resp, err = client.mkdir(session_id, dirname='temp')
-
-    print('creo list_dirs')
-    resp, err = client.dir_list(session_id)
-    print(f'list_dir resp: {resp}')
+    # print('create temp dir ...')
+    # resp, err = client.mkdir(session_id, dirname='temp')
+    #
+    # print('creo list_dirs')
+    # resp, err = client.dir_list(session_id)
+    # print(f'list_dir resp: {resp}')
 
     print('getting current work directory ...')
-    resp, err = client.pwd(session_id)
+    curr_dir, err = client.pwd(session_id)
     print(f'curr dir {resp}')
+    #
+    # print('removing directory')
+    # resp, err = client.rmdir(session_id, 'temp')
 
-    print('removing directory')
-    resp, err = client.rmdir(session_id, 'temp')
+    # print('creo list_dirs')
+    # resp, err = client.dir_list(session_id)
+    # print(f'list_dir resp: {resp}')
 
-    print('creo list_dirs')
-    resp, err = client.dir_list(session_id)
-    print(f'list_dir resp: {resp}')
+    print('opening the file ...')
+    resp, err = client.open_file(session_id, dirname=curr_dir, filenames=('Fork.prt', ), display=True)
+    print(f'open resp: {resp}')
+
+    print('getting dimensions')
+    resp, err = client.dimensions_list(session_id, filename='fork.prt')
+    print(f'dimensions list: {resp}')
 
     # print('stopping creo')
     # if is_running:
