@@ -1,4 +1,4 @@
-from src.client import CreosonClient
+from pycreo import CreosonClient
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
-from src.commands import ConnectionCommandsMixin, CreoCommandsMixin
-from src.core import CreosonApi
-from src import configs
-from src.http_client import HttpClient
+from pycreo.commands import ConnectionCommandsMixin, CreoCommandsMixin
+from pycreo.core import CreosonApi
+from pycreo import configs
+from pycreo.http_client import HttpClient
 
 
 class CreosonClient(ConnectionCommandsMixin,

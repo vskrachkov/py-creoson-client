@@ -1,4 +1,7 @@
 .idea/
+build/
+dist/
 .env/
 *.pyc
 __pycahe__
+MANIFEST
