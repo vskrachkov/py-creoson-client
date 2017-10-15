@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from pycreo import CreosonClient
 
 
@@ -47,17 +49,39 @@ if __name__ == '__main__':
     # print(f'list_dir resp: {resp}')
 
     print('opening the file ...')
-    resp, err = client.open_file(session_id, dirname=curr_dir, filenames=('Fork.prt', ), display=True)
+    resp, err = client.open_file(session_id, dirname=curr_dir, filenames=('pin.prt', ), display=True)
     print(f'open resp: {resp}')
 
-    print('getting dimensions')
-    resp, err = client.dimensions_list(session_id, filename='fork.prt')
-    print(f'dimensions list: {resp}')
+    # print('getting dimensions')
+    # resp, err = client.dimensions_list(session_id, filename='fork.prt')
+    # print(f'dimensions list: {resp}')
+    #
+    # print('getting parameters list ...')
+    # resp, err = client.parameters_list(session_id, filename='fork.prt')
+    # print(f'parameters list: {resp}')
+    #
+    # print('getting bound box')
+    # resp, err = client.bound_box(session_id, filename='fork.prt')
+    # print(f'bound box: {resp}')
 
-    print('getting parameters list ...')
-    resp, err = client.parameters_list(session_id, filename='fork.prt')
-    print(f'parameters list: {resp}')
+    print('get surfaces list')
+    resp, err = client.get_surfaces(session_id, filename='key1.prt')
+    for surface in resp:
+        pprint(surface)
 
+    print('surface ids: ')
+    surface_ids = *(sid['surface_id'] for sid in resp),
+    pprint(surface_ids)
+
+    print('getting surface edges ...')
+    resp, err = client.get_edges(session_id, filename='key1.prt', surface_ids=surface_ids)
+    print('surface edges:')
+    # print(resp)
+    contours_count = len(resp)
+    print(f'contours count: {contours_count}')
+    for contour in resp:
+        print('=================================')
+        pprint(contour)
     # print('stopping creo')
     # if is_running:
     #     resp, err = client.stop_creo(session_id)

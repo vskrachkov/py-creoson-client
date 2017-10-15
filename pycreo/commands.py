@@ -193,3 +193,41 @@ class ParameterCommandsMixin(BaseCommandMixin):
             }
         })
         return resp, err
+
+
+class GeometryCommandsMixin(BaseCommandMixin):
+    def bound_box(self, session_id, filename):
+        resp, err = self._send_request({
+            'command': 'geometry',
+            'function': 'bound_box',
+            'sessionId': session_id,
+            'data': {
+                'file': filename,
+            }
+        })
+        return resp, err
+
+    def get_edges(self, session_id, surface_ids, filename=None):
+        resp, err = self._send_request({
+            'command': 'geometry',
+            'function': 'get_edges',
+            'sessionId': session_id,
+            'data': {
+                'file': filename,
+                'surface_ids': surface_ids
+            }
+        })
+        contourlist = resp['data']['contourlist']
+        return contourlist, err
+
+    def get_surfaces(self, session_id, filename):
+        resp, err = self._send_request({
+            'command': 'geometry',
+            'function': 'get_surfaces',
+            'sessionId': session_id,
+            'data': {
+                'file': filename,
+            }
+        })
+        surflist = resp['data']['surflist']
+        return surflist, err
