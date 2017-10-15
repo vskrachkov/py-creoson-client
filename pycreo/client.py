@@ -4,7 +4,8 @@ from pycreo.commands import (
     DimensionCommandsMixin,
     FileCommandsMixin,
     ParameterCommandsMixin,
-    GeometryCommandsMixin
+    GeometryCommandsMixin,
+    BomCommandsMixin,
 )
 from pycreo.core import CreosonApi
 from pycreo import configs
@@ -17,6 +18,7 @@ class CreosonClient(ConnectionCommandsMixin,
                     FileCommandsMixin,
                     ParameterCommandsMixin,
                     GeometryCommandsMixin,
+                    BomCommandsMixin,
                     CreosonApi):
     _configs = configs.configs
 

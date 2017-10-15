@@ -152,7 +152,7 @@ class DimensionCommandsMixin(BaseCommandMixin):
 
 
 class FileCommandsMixin(BaseCommandMixin):
-    def open_file(self,
+    def open_files(self,
                   session_id,
                   dirname,
                   filenames=(),
@@ -231,3 +231,29 @@ class GeometryCommandsMixin(BaseCommandMixin):
         })
         surflist = resp['data']['surflist']
         return surflist, err
+
+
+class BomCommandsMixin(BaseCommandMixin):
+    def get_paths(self,
+                  session_id,
+                  filename,
+                  paths=False,
+                  skeletons=False,
+                  top_level=False,
+                  get_transforms=False,
+                  exclude_inactive=False,
+                  ):
+        resp, err = self._send_request({
+            'command': 'bom',
+            'function': 'get_paths',
+            'sessionId': session_id,
+            'data': {
+                'file': filename,
+                'paths': paths,
+                'skeletons': skeletons,
+                'top_level': top_level,
+                'get_transforms': get_transforms,
+                'exclude_inactive': exclude_inactive,
+            }
+        })
+        return resp, err

@@ -40,6 +40,18 @@ if __name__ == '__main__':
     print('getting current work directory ...')
     curr_dir, err = client.pwd(session_id)
     print(f'curr dir {resp}')
+
+    print('opening the file ...')
+    resp, err = client.open_files(
+        session_id,
+        dirname=curr_dir,
+        filenames=('universal_coupling.asm',
+                   'key1.prt',
+                   'pin.prt',
+                   )
+    )
+    print(f'open resp: {resp}')
+
     #
     # print('removing directory')
     # resp, err = client.rmdir(session_id, 'temp')
@@ -48,9 +60,9 @@ if __name__ == '__main__':
     # resp, err = client.dir_list(session_id)
     # print(f'list_dir resp: {resp}')
 
-    print('opening the file ...')
-    resp, err = client.open_file(session_id, dirname=curr_dir, filenames=('pin.prt', ), display=True)
-    print(f'open resp: {resp}')
+    # print('opening the file ...')
+    # resp, err = client.open_file(session_id, dirname=curr_dir, filenames=('pin.prt', ), display=True)
+    # print(f'open resp: {resp}')
 
     # print('getting dimensions')
     # resp, err = client.dimensions_list(session_id, filename='fork.prt')
@@ -64,24 +76,24 @@ if __name__ == '__main__':
     # resp, err = client.bound_box(session_id, filename='fork.prt')
     # print(f'bound box: {resp}')
 
-    print('get surfaces list')
-    resp, err = client.get_surfaces(session_id, filename='key1.prt')
-    for surface in resp:
-        pprint(surface)
+    # print('get surfaces list')
+    # resp, err = client.get_surfaces(session_id, filename='key1.prt')
+    # for surface in resp:
+    #     pprint(surface)
 
-    print('surface ids: ')
-    surface_ids = *(sid['surface_id'] for sid in resp),
-    pprint(surface_ids)
-
-    print('getting surface edges ...')
-    resp, err = client.get_edges(session_id, filename='key1.prt', surface_ids=surface_ids)
-    print('surface edges:')
-    # print(resp)
-    contours_count = len(resp)
-    print(f'contours count: {contours_count}')
-    for contour in resp:
-        print('=================================')
-        pprint(contour)
+    # print('surface ids: ')
+    # surface_ids = *(sid['surface_id'] for sid in resp),
+    # pprint(surface_ids)
+    #
+    # print('getting surface edges ...')
+    # resp, err = client.get_edges(session_id, filename='key1.prt', surface_ids=surface_ids)
+    # print('surface edges:')
+    # # print(resp)
+    # contours_count = len(resp)
+    # print(f'contours count: {contours_count}')
+    # for contour in resp:
+    #     print('=================================')
+    #     pprint(contour)
     # print('stopping creo')
     # if is_running:
     #     resp, err = client.stop_creo(session_id)
@@ -96,6 +108,16 @@ if __name__ == '__main__':
     #     print(f'error: {err}, resp: {resp}')
     # else:
     #     print('creo is started')
+
+    print('getting paths ...')
+    resp, err = client.get_paths(
+        session_id,
+        filename='universal_coupling.asm',
+        paths=True,
+        skeletons=True,
+    )
+    print('assembly paths:')
+    pprint(resp)
 
     print('closing session')
     _, err = client.disconnect(session_id)
