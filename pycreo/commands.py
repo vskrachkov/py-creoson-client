@@ -66,13 +66,71 @@ class ConnectionCommandsMixin(BaseCommandMixin):
 
 
 class CreoCommandsMixin(BaseCommandMixin):
-    def dir_list(self, session_id):
+    def dir_list(self, session_id, dirname_mask=None):
         resp, err = self._send_request({
             'command': 'creo',
             'function': 'list_dirs',
             'sessionId': session_id,
             'data': {
-                'dirname': '*'
+                'dirname': dirname_mask or '*'
+            }
+        })
+        return resp, err
+
+    def files_list(self, session_id, dirname_mask=None, filename_mask=None):
+        resp, err = self._send_request({
+            'command': 'creo',
+            'function': 'list_files',
+            'sessionId': session_id,
+            'data': {
+                'dirname': dirname_mask or '*',
+                'filename': filename_mask or '*'
+            }
+        })
+        return resp, err
+
+    def go_to_work_dir(self, session_id):
+        return self.cd(session_id, self._configs.get('WORK_DIR'))
+
+    def cd(self, session_id, dirname):
+        resp, err = self._send_request({
+            'command': 'creo',
+            'function': 'cd',
+            'sessionId': session_id,
+            'data': {
+                'dirname': dirname
+            }
+        })
+        return resp, err
+
+    def mkdir(self, session_id, dirname):
+        resp, err = self._send_request({
+            'command': 'creo',
+            'function': 'mkdir',
+            'sessionId': session_id,
+            'data': {
+                'dirname': dirname
+            }
+        })
+        return resp, err
+
+    def pwd(self, session_id):
+        """Returns path to the work directory."""
+        resp, err = self._send_request({
+            'command': 'creo',
+            'function': 'pwd',
+            'sessionId': session_id,
+        })
+        return resp, err
+
+    def rmdir(self, session_id, dirname):
+        """Removes empty directory."""
+        resp, err = self._send_request({
+            'command': 'creo',
+            'function': 'mkdir',
+            'sessionId': session_id,
+            'data': {
+                'dirname': dirname
             }
         })
         return resp, err

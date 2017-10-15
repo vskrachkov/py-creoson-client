@@ -15,10 +15,5 @@ configs = {
     'CONNECTING_RETRIES': os.getenv('PY_CREO_RETRIES', 0),
 
     # path to the work directory
-    'WORK_DIR': os.getenv('PY_CREO_WORK_DIR', 'c:\\'),
+    'WORK_DIR': os.getenv('PY_CREO_WORK_DIR', 'e:\\creo_project'),
 }
-
-try:
-    from .configs_local import *
-except ImportError:
-    pass

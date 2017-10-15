@@ -5,3 +5,4 @@ dist/
 *.pyc
 __pycahe__
 MANIFEST
+*local.py
