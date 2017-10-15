@@ -54,6 +54,10 @@ if __name__ == '__main__':
     resp, err = client.dimensions_list(session_id, filename='fork.prt')
     print(f'dimensions list: {resp}')
 
+    print('getting parameters list ...')
+    resp, err = client.parameters_list(session_id, filename='fork.prt')
+    print(f'parameters list: {resp}')
+
     # print('stopping creo')
     # if is_running:
     #     resp, err = client.stop_creo(session_id)

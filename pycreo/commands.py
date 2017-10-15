@@ -174,3 +174,22 @@ class FileCommandsMixin(BaseCommandMixin):
             }
         })
         return resp, err
+
+
+class ParameterCommandsMixin(BaseCommandMixin):
+    def parameters_list(self,
+                        session_id,
+                        filename=None,
+                        parameters=(),
+                        value_filter=''):
+        resp, err = self._send_request({
+            'command': 'parameter',
+            'function': 'list',
+            'sessionId': session_id,
+            'data': {
+                'file': filename,
+                'names': parameters,
+                'value': value_filter,
+            }
+        })
+        return resp, err
