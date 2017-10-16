@@ -2,7 +2,7 @@ import os
 
 configs = {
     # url on which creoson server is running
-    'API_URL': os.getenv('PY_CREOSON_API_URL', 'http://192.168.0.104:9056/creoson'),
+    'API_URL': os.getenv('PY_CREOSON_API_URL', 'http://192.168.0.100:9056/creoson'),
 
     # directory that contains .bat file with instructions to run Creo
     'START_DIR': os.getenv('PY_CREOSON_START_DIR', 'C:\\Program Files\\PTC'),

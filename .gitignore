@@ -5,4 +5,5 @@ dist/
 *.pyc
 __pycahe__
 MANIFEST
-*local.py
+**/configs_local.py
+**/_temp.py

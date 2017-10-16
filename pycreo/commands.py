@@ -42,6 +42,7 @@ class ConnectionCommandsMixin(BaseCommandMixin):
         data = resp.get('data')
         if data:
             return data.get('running'), err
+        return resp, err
 
     def start_creo(self):
         resp, err = self._send_request({
@@ -67,6 +68,7 @@ class ConnectionCommandsMixin(BaseCommandMixin):
 
 class CreoCommandsMixin(BaseCommandMixin):
     def dir_list(self, session_id, dirname_mask=None):
+        """Returns list of directories in current dir."""
         resp, err = self._send_request({
             'command': 'creo',
             'function': 'list_dirs',
@@ -75,6 +77,9 @@ class CreoCommandsMixin(BaseCommandMixin):
                 'dirname': dirname_mask or '*'
             }
         })
+        data = resp.get('data')
+        if data:
+            return data.get('dirlist'), err
         return resp, err
 
     def files_list(self, session_id, dirname_mask=None, filename_mask=None):
@@ -87,9 +92,15 @@ class CreoCommandsMixin(BaseCommandMixin):
                 'filename': filename_mask or '*'
             }
         })
+        data = resp.get('data')
+        if data:
+            return data.get('filelist'), err
         return resp, err
 
     def go_to_work_dir(self, session_id):
+        """Go to the directory specified in `PY_CREO_WORK_DIR` env variable.
+        Returns path to the work directory.
+        """
         return self.cd(session_id, self._configs.get('WORK_DIR'))
 
     def cd(self, session_id, dirname):
@@ -101,6 +112,9 @@ class CreoCommandsMixin(BaseCommandMixin):
                 'dirname': dirname
             }
         })
+        data = resp.get('data')
+        if data:
+            return data.get('dirname'), err
         return resp, err
 
     def mkdir(self, session_id, dirname):
@@ -121,14 +135,16 @@ class CreoCommandsMixin(BaseCommandMixin):
             'function': 'pwd',
             'sessionId': session_id,
         })
-        curr_dir = resp['data']['dirname']
-        return curr_dir, err
+        data = resp.get('data')
+        if data:
+            return data.get('dirname'), err
+        return resp, err
 
     def rmdir(self, session_id, dirname):
         """Removes empty directory."""
         resp, err = self._send_request({
             'command': 'creo',
-            'function': 'mkdir',
+            'function': 'rmdir',
             'sessionId': session_id,
             'data': {
                 'dirname': dirname
@@ -148,6 +164,9 @@ class DimensionCommandsMixin(BaseCommandMixin):
                 'names': dimension_names
             }
         })
+        data = resp.get('data')
+        if data:
+            return data.get('dimlist'), err
         return resp, err
 
 
@@ -173,7 +192,28 @@ class FileCommandsMixin(BaseCommandMixin):
                 'regen_force': regen_force,
             }
         })
+        data = resp.get('data')
+        if data:
+            return data, err
         return resp, err
+
+    def open_file(self,
+                  session_id,
+                  dirname,
+                  filename,
+                  display=False,
+                  activate=False,
+                  new_window=False,
+                  regen_force=False):
+        return self.open_files(
+            session_id,
+            dirname,
+            filename,
+            display,
+            activate,
+            new_window,
+            regen_force,
+        )
 
 
 class ParameterCommandsMixin(BaseCommandMixin):
@@ -192,6 +232,9 @@ class ParameterCommandsMixin(BaseCommandMixin):
                 'value': value_filter,
             }
         })
+        data = resp.get('data')
+        if data:
+            return data.get('paramlist'), err
         return resp, err
 
 
@@ -205,6 +248,9 @@ class GeometryCommandsMixin(BaseCommandMixin):
                 'file': filename,
             }
         })
+        data = resp.get('data')
+        if data:
+            return data, err
         return resp, err
 
     def get_edges(self, session_id, surface_ids, filename=None):
@@ -217,8 +263,10 @@ class GeometryCommandsMixin(BaseCommandMixin):
                 'surface_ids': surface_ids
             }
         })
-        contourlist = resp['data']['contourlist']
-        return contourlist, err
+        data = resp.get('data')
+        if data:
+            return data.get('contourlist'), err
+        return resp, err
 
     def get_surfaces(self, session_id, filename):
         resp, err = self._send_request({
@@ -229,8 +277,17 @@ class GeometryCommandsMixin(BaseCommandMixin):
                 'file': filename,
             }
         })
-        surflist = resp['data']['surflist']
-        return surflist, err
+        data = resp.get('data')
+        if data:
+            return data.get('surflist'), err
+        return resp, err
+
+    def get_surface_ids(self, session_id, filename):
+        resp, err = self.get_surfaces(session_id, filename)
+        if not err:
+            surface_ids = *(sid['surface_id'] for sid in resp),
+            return surface_ids, err
+        return resp, err
 
 
 class BomCommandsMixin(BaseCommandMixin):
@@ -256,4 +313,7 @@ class BomCommandsMixin(BaseCommandMixin):
                 'exclude_inactive': exclude_inactive,
             }
         })
+        data = resp.get('data')
+        if data:
+            return data.get('children'), err
         return resp, err
