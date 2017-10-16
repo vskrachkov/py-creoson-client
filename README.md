@@ -281,3 +281,23 @@ result:
      'seq_path': 'root'
 }
 ```
+
+#### Closing the Creo
+```
+print('stopping creo')
+if is_running:
+    resp, err = client.stop_creo(session_id)
+    if err:
+        print(f'stop with error, detail: {resp}')
+    else:
+        print('creo is stopped')
+```
+
+#### Starting the Creo
+```
+resp, err = client.start_creo()
+if err:
+    print(f'error: {err}, resp: {resp}')
+else:
+    print('creo is started')
+```
